@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package galacticempire.blog;
+
+import "gogoproto/gogo.proto";
+import "galacticempire/blog/params.proto";
+
+option go_package = "galactic-empire/x/blog/types";
+
+// GenesisState defines the blog module's genesis state.
+message GenesisState {
+  Params params  = 1 [(gogoproto.nullable) = false];
+  string port_id = 2;
+}
+

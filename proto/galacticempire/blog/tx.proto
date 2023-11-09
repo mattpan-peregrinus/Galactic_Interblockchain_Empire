@@ -1,0 +1,7 @@
+syntax = "proto3";
+package galacticempire.blog;
+
+option go_package = "galactic-empire/x/blog/types";
+
+// Msg defines the Msg service.
+service Msg {}
