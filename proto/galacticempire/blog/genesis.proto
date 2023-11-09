@@ -4,12 +4,21 @@ package galacticempire.blog;
 
 import "gogoproto/gogo.proto";
 import "galacticempire/blog/params.proto";
+import "galacticempire/blog/post.proto";
+import "galacticempire/blog/sent_post.proto";
+import "galacticempire/blog/timedout_post.proto";
 
 option go_package = "galactic-empire/x/blog/types";
 
 // GenesisState defines the blog module's genesis state.
 message GenesisState {
-  Params params  = 1 [(gogoproto.nullable) = false];
-  string port_id = 2;
+           Params       params            = 1 [(gogoproto.nullable) = false];
+           string       port_id           = 2;
+  repeated Post         postList          = 3 [(gogoproto.nullable) = false];
+           uint64       postCount         = 4;
+  repeated SentPost     sentPostList      = 5 [(gogoproto.nullable) = false];
+           uint64       sentPostCount     = 6;
+  repeated TimedoutPost timedoutPostList  = 7 [(gogoproto.nullable) = false];
+           uint64       timedoutPostCount = 8;
 }
 
