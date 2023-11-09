@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"errors"
+	"strconv"
 
 	"galactic-empire/x/blog/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -40,6 +41,17 @@ func (k Keeper) OnRecvIbcPostPacket(ctx sdk.Context, packet channeltypes.Packet,
 		return packetAck, err
 	}
 
+	id := k.AppendPost(
+        ctx,
+        types.Post{
+            Creator: packet.SourcePort + "-" + packet.SourceChannel + "-" + data.Creator,
+            Title:   data.Title,
+            Content: data.Content,
+        },
+    )
+
+    packetAck.PostID = strconv.FormatUint(id, 10)
+
 	// TODO: packet reception logic
 
 	return packetAck, nil
@@ -63,6 +75,15 @@ func (k Keeper) OnAcknowledgementIbcPostPacket(ctx sdk.Context, packet channelty
 			// The counter-party module doesn't implement the correct acknowledgment format
 			return errors.New("cannot unmarshal acknowledgment")
 		}
+		k.AppendSentPost(
+            ctx,
+            types.SentPost{
+                Creator: data.Creator,
+                PostID:  packetAck.PostID,
+                Title:   data.Title,
+                Chain:   packet.DestinationPort + "-" + packet.DestinationChannel,
+            },
+        )
 
 		// TODO: successful acknowledgement logic
 
@@ -77,6 +98,14 @@ func (k Keeper) OnAcknowledgementIbcPostPacket(ctx sdk.Context, packet channelty
 func (k Keeper) OnTimeoutIbcPostPacket(ctx sdk.Context, packet channeltypes.Packet, data types.IbcPostPacketData) error {
 
 	// TODO: packet timeout logic
+	k.AppendTimedoutPost(
+        ctx,
+        types.TimedoutPost{
+            Creator: data.Creator,
+            Title:   data.Title,
+            Chain:   packet.DestinationPort + "-" + packet.DestinationChannel,
+        },
+    )
 
 	return nil
 }
