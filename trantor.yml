@@ -8,17 +8,17 @@ build:
 accounts:
 - name: alice
   coins:
-  - 1000token
-  - 100000000stake
+  - 100000token
+  - 10000000000stake
 - name: bob
   coins:
-  - 500token
-  - 100000000stake
+  - 50000token
+  - 10000000000stake
 faucet:
   name: bob
   coins:
   - 5token
-  - 100000stake
+  - 10000000stake
   host: 0.0.0.0:4500
 genesis:
   chain_id: trantor
